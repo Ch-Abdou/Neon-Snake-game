@@ -395,3 +395,4 @@ class Game {
 
 // Start Game
 window.game = new Game();
+
