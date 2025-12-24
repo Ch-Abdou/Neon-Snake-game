@@ -1,4 +1,4 @@
- // Game Configuration
+  // Game Configuration
 const GRID_SIZE = 20;
 const TILE_COUNT = 30; // 30x20 grid = 600x400 canvas roughly, will adjust dynamically
 const GAME_SPEED = 100; // ms per frame
