@@ -194,6 +194,18 @@ class Game {
         this.restartBtn.addEventListener('click', () => this.restart());
         window.addEventListener('resize', () => this.resize());
         document.addEventListener('keydown', (e) => this.input(e));
+        
+        // Touch controls
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        document.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.changedTouches[0].screenX;
+            this.touchStartY = e.changedTouches[0].screenY;
+        }, {passive: false});
+        
+        document.addEventListener('touchend', (e) => {
+            this.handleSwipe(e.changedTouches[0].screenX, e.changedTouches[0].screenY);
+        }, {passive: false});
 
         this.score = 0;
         this.highScore = localStorage.getItem('snakeHighScore') || 0;
@@ -242,6 +254,34 @@ class Game {
             case 'D':
                 this.snake.setDirection(1, 0);
                 break;
+        }
+    }
+
+    handleSwipe(endX, endY) {
+        if (this.state !== 'PLAYING') return;
+
+        const diffX = endX - this.touchStartX;
+        const diffY = endY - this.touchStartY;
+        const threshold = 30; // Min swipe distance
+
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            // Horizontal swipe
+            if (Math.abs(diffX) > threshold) {
+                if (diffX > 0) {
+                    this.snake.setDirection(1, 0); // Right
+                } else {
+                    this.snake.setDirection(-1, 0); // Left
+                }
+            }
+        } else {
+            // Vertical swipe
+            if (Math.abs(diffY) > threshold) {
+                if (diffY > 0) {
+                    this.snake.setDirection(0, 1); // Down
+                } else {
+                    this.snake.setDirection(0, -1); // Up
+                }
+            }
         }
     }
 
